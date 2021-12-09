@@ -13,7 +13,7 @@ services:
       REDDIT_CID: YOURCLIENTID
       REDDIT_SECRET: YOURSECRET
       REDDIT_SUBREDDIT: SubReddit
-      WIKIPAGE: config-annoucementbot
+      REDDIT_WIKIPAGE: config-annoucementbot
 
     volumes:
       - ./data:/data
