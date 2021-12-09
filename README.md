@@ -12,10 +12,9 @@ services:
       # get your Client_ID and Secret from https://www.reddit.com/prefs/apps
       REDDIT_CID: YOURCLIENTID
       REDDIT_SECRET: YOURSECRET
-      # you can monitor multiple subreddits using subreddit1+subreddit2+subreddit3
       REDDIT_SUBREDDIT: SubReddit
-
       WIKIPAGE: config-annoucementbot
+
     volumes:
       - ./data:/data
     restart: always
