@@ -3,10 +3,9 @@ FROM python:3.9
 WORKDIR /app
 
 COPY ./requirements.txt /tmp
+COPY bot/ /app
 
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt  --no-cache-dir
 
-COPY bot/ .
-RUN chmod +x bot.py
-
-CMD [ "python3", "/app/bot.py" ]
+RUN chmod +x "/app/run.sh"
+CMD [ "/app/run.sh" ]

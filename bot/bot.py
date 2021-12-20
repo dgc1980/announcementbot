@@ -63,23 +63,30 @@ def run_schedule():
     logging.info("Running Schedule")
     wikistring = reddit.subreddit(reddit_subreddit).wiki[reddit_wikipage].content_md
     wikiconfig = next(yaml.safe_load_all( wikistring ))
-    currentsticky = open(apppath+'current.txt', 'r').readlines()
+    if 'current' in wikiconfig:
+      currentsticky = wikiconfig['current']
+    else:
+      currentsticky = []
     for stickyid in currentsticky:
       submission =  reddit.submission(stickyid.rstrip())
       logging.info("Removing Sticky on https://redd.it/"+submission.id)
       submission.mod.sticky(state=False)
 
-    random.shuffle(wikiconfig['posts'])
-
-    f = open(apppath+"current.txt","w")
+    #print( yaml.dump(wikiconfig) )
+    currentsticky = []
     for i in range(int(wikiconfig['slots'])):
         submission = reddit.submission(url=wikiconfig['posts'][i])
+        wikiconfig['posts'].append( wikiconfig['posts'][i] )
+        del wikiconfig['posts'][i]
         logging.info("Applying Sticky on https://redd.it/"+submission.id)
         submission.mod.sticky(state=True,bottom=True)
-        f.write(submission.id+"\n")
-    f.close()
+        currentsticky.append( submission.id )
+    wikiconfig['current'] = currentsticky
     logging.info("Schedule Done.")
+    reddit.subreddit(reddit_subreddit).wiki[reddit_wikipage].edit(yaml.dump(wikiconfig))
+    #print( yaml.dump(wikiconfig) )
 
+#run_schedule()
 schedule.every().day.at( wikiconfig['run-time'] ).do(run_schedule)
 logging.info("bot initialized...." )
 while True:
